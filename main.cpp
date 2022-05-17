@@ -1,12 +1,20 @@
 #include "dz1.h"
-
+#include "dz2.h"
 
 int main()
 {
-	TestPower();
+	//------------dz1------------
+
+	/*TestPower();
 	RunPowerClass();
 	TestRgba();
 	RunRgbaClass();
-	TestStack();
-	return 0;
+	TestStack();*/
+
+	//------------ dz2-----------
+
+	TestStudents();
+	TestFruits();
+	
+  return 0;
 }
