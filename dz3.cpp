@@ -196,7 +196,7 @@ namespace cars
 	}
 
 	Minivan::Minivan(const std::string& company, const std::string& model)
-		: PassengerCar(company, model), Bus(company, model), Car(company, model)
+		: PassengerCar(company, model), Bus(company, model)
 	{
 		std::cout << "With parameters " << __FUNCTION__ << std::endl;
 	}
