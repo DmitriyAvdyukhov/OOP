@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
 
 project(OOP)
+set(CMAKE_CXX_STANDARD 17)
 
-add_executable(main main.cpp dz1.h dz2.h)
+set(FILES_PROJECT main.cpp 
+                  dz1.h 
+				  dz2.h
+				  dz3.h dz3.cpp
+				  black_jack.h black_jack.cpp)
+				  
+add_executable(main ${FILES_PROJECT})

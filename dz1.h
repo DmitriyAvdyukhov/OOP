@@ -274,8 +274,8 @@ namespace simple_stack
 			{
 				return false;
 			}
-			stack_[size_] = value;
-			++size_;
+			stack_[size_++] = value;
+			
 			return true;
 		}
 
@@ -288,9 +288,8 @@ namespace simple_stack
 			}
 			else
 			{
-				result = stack_[size_ - 1];
-				stack_[size_ - 1] = 0;
-				--size_;
+				result = stack_[--size_];
+				stack_[size_] = 0;				
 			}
 			return result;
 		}
@@ -356,4 +355,13 @@ void TestStack()
 		stack.Print();
 	}
 	std::cout << "Test Stack is Ok" << std::endl;
+}
+
+void Dz1()
+{
+	TestPower();
+	RunPowerClass();
+	TestRgba();
+	RunRgbaClass();
+	TestStack();
 }

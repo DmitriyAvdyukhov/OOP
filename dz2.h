@@ -137,7 +137,7 @@ person::Student AddStudent(size_t i)
 	std::cout << "Please enter year study of " << i + 1 << " student" << std::endl;
 	std::cin >> year_study;
 	person::Gender gender = person::Gender::MALE;
-	if (gen == "F")
+	if (gen == "Female")
 	{
 		gender = person::Gender::FEMALE;
 	}
@@ -226,4 +226,10 @@ void TestFruits()
 	std::cout << "My " << a.GetName() << " is " << a.GetColor() << ".\n";
 	std::cout << "My " << b.GetName() << " is " << b.GetColor() << ".\n";
 	std::cout << "My " << c.GetName() << " is " << c.GetColor() << ".\n";
+}
+
+void Dz2()
+{
+	TestStudents();
+	TestFruits();
 }
