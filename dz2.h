@@ -124,25 +124,29 @@ namespace person
 		{	
 			if (*this != s)
 			{
-				SetAge(std::move(s.GetAge()));
-				SetName(std::move(s.GetName()));
+				SetAge(s.GetAge());
+				s.SetAge(0);
+				SetName(s.GetName());
+				s.SetName({});
 				SetGender(std::move(s.GetGender()));
-				SetWeight(std::move(s.GetWeight()));
-				year_study_ = std::move(s.year_study_);					
+				SetWeight(s.GetWeight());
+				s.SetWeight(0);
+				year_study_ = std::exchange(s.year_study_, 0);
 			}
 		}
 		
-		Student operator=(Student&& s) noexcept
+		Student& operator=(Student&& s) noexcept
 		{
 			if (*this != s)
 			{
-				SetAge(std::move(s.GetAge()));
-				SetName(std::move(s.GetName()));
+				SetAge(s.GetAge());
+				s.SetAge(0);
+				SetName(s.GetName());
+				s.SetName({});
 				SetGender(std::move(s.GetGender()));
-				SetWeight(std::move(s.GetWeight()));
-				year_study_ = std::move(s.year_study_);
-				++count_students_;
-				s.~Student();
+				SetWeight(s.GetWeight());
+				s.SetWeight(0);
+				year_study_ = std::exchange(s.year_study_, 0);	
 			}
 			return *this;
 		}
@@ -160,7 +164,7 @@ namespace person
 			}						
 		}
 
-		Student operator=(Student& s) noexcept
+		Student& operator=(Student& s) noexcept
 		{
 			if (*this != s)
 			{
@@ -278,7 +282,10 @@ void TestStudents()
 	person::Student s4(person::Student("Petrov", 23, person::Gender::MALE, 67, 2021));
 	assert(person::Student::GetCountStudents() == 4);
 	assert(s4 != s1);	
-	
+	person::Student s5 = std::move(s2);
+	assert(s5 == s3);
+	assert(person::Student::GetCountStudents() == 4);
+
 	PrintPerson(QreatePerson());	
 }
 
