@@ -35,7 +35,7 @@ namespace person
 			: name_(name), age_(age), gender_(gender), weight_(weight)
 		{}
 
-		void SetName(std::string& name)
+		void SetName(const std::string& name)
 		{
 			name_ = name;
 		}
@@ -48,6 +48,11 @@ namespace person
 		void SetWeight(size_t weight) 
 		{
 			weight_ = weight;
+		}
+
+		void SetGender(Gender gender)
+		{
+			gender_ = gender;
 		}
 
 		std::string GetName() const
@@ -71,9 +76,9 @@ namespace person
 		}
 
 	private:
-		std::string name_;
+		std::string name_{};
 		size_t age_ = 0;
-		const Gender gender_;
+		Gender gender_ = Gender::MALE;
 		size_t weight_ = 0;		
 	};
 
@@ -81,13 +86,40 @@ namespace person
 	class Student final : public Person
 	{
 	public:
-		Student() = default;
+		Student()
+		{
+			++count_students_;
+		}
 
 		Student(const std::string& name, size_t age, Gender gender, size_t weight, size_t year_study)
 			: Person(name, age, gender, weight), year_study_(year_study)
 		{
 			++count_students_;
 		}	
+		~Student()
+		{
+			--count_students_;
+		}
+
+		Student(Student&& s) noexcept
+		{
+			SetAge(s.GetAge());
+			SetName(s.GetName());
+			SetGender(s.GetGender());
+			SetWeight(s.GetWeight());
+			year_study_ = s.year_study_;
+			++count_students_;			
+		}
+		
+		Student(const Student& s)
+		{
+			SetAge(s.GetAge());
+			SetName(s.GetName());
+			SetGender(s.GetGender());
+			SetWeight(s.GetWeight());
+			year_study_ = s.year_study_;
+			++count_students_;			
+		}
 
 		void SetYearStudy(size_t year)
 		{
@@ -153,7 +185,7 @@ std::vector<person::Student> QreatePerson()
 	std::cin >> count;
 	for (size_t i = 0; i < count; ++i)
 	{
-		persons.push_back(AddStudent(i));
+		persons.push_back(std::move(AddStudent(i)));
 	}
 	return persons;
 }
@@ -165,7 +197,7 @@ void PrintPerson(const std::vector<person::Student>& persons)
 	{
 		std::cout << person << std::endl;
 	}
-	std::cout << "\nAmount of the persons: " << persons[0].GetCountStudents();
+	std::cout << "\nAmount of the persons: " << person::Student::GetCountStudents();
 	std::cout << std::endl;
 }
 
