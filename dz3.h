@@ -24,12 +24,14 @@ namespace figures
 
 		double GetSideX() const;
 
+		std::string GetNameFigure() const override = 0;
+
 	private:
 		double side_x_ = 0;
 		double side_y_ = 0;
 	};
 
-	class Rectangle :public Parallelogram
+	class Rectangle : public Parallelogram
 	{
 	public:
 		Rectangle();
@@ -115,7 +117,7 @@ namespace cars
 		~Bus();		
 	};
 
-	class Minivan : public PassengerCar, public Bus
+	class Minivan :  public PassengerCar,  public Bus
 	{
 	public:
 		Minivan();		
@@ -197,32 +199,5 @@ namespace fraction
 }//end namespace fraction
 
 
-namespace card
-{
-	enum class CardSuit
-	{
-		CLUB,
-		DIAMOND,
-		WORM,
-		SPANDES
-	};
 
-	enum class CardValue
-	{
-		ONE = 1,
-		TWO = 2,
-		THREE = 3,
-		FOUR = 4,
-		FIVE = 5,
-		SIX = 6,
-		SEVEN = 7,
-		EIGHT = 8,
-		NINE = 9,
-		TEN = 10,
-		JACK = 10,
-		QUEEN = 10,
-		KING = 10,
-		ACE = 1
-	};	
-}
 void Dz3();
