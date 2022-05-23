@@ -85,7 +85,7 @@ namespace figures
 	//--------------------TestArea-------------------
 
 	void TestArea()
-	{
+	{ 
 		size_t count = 0;
 		std::cout << "How many figures do you want qreate" << std::endl;
 		std::cin >> count;
@@ -212,7 +212,7 @@ namespace cars
 	{
 		PassengerCar passenger_car("BMW", "X3");
 		Bus bus("Mercedec", "XL300");
-		Minivan minivan("WV", "500");
+		Minivan minivan("WV", "500");		
 	}
 
 }// end namespace cars
@@ -399,9 +399,9 @@ namespace fraction
 		assert(out_str.str() == "1/2");
 		assert(fraction.GetValueFraction() == 0.5);
 	}
-	
-	
-}
+
+}//end namespace fraction
+
 void Dz3()
 {
 	figures::TestArea();

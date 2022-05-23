@@ -117,7 +117,7 @@ namespace cars
 		~Bus();		
 	};
 
-	class Minivan :  public PassengerCar,  public Bus
+	class Minivan : public PassengerCar, public Bus
 	{
 	public:
 		Minivan();		

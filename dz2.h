@@ -285,7 +285,7 @@ void TestStudents()
 	person::Student s5 = std::move(s2);
 	assert(s5 == s3);
 	assert(person::Student::GetCountStudents() == 4);
-
+	std::cout << typeid(s5).name();
 	PrintPerson(QreatePerson());	
 }
 
