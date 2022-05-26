@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <memory>
+
 
 namespace card
 {
@@ -13,20 +15,20 @@ namespace card
 	};
 
 	enum class CardValue
-	{
-		ACE = 1,
+	{		
 		TWO = 2,
-		THREE = 3,
-		FOUR = 4,
-		FIVE = 5,
-		SIX = 6,
-		SEVEN = 7,
-		EIGHT = 8,
-		NINE = 9,
-		TEN = 10,
-		JACK = 10,
-		QUEEN = 10,
-		KING = 10
+		THREE,
+		FOUR,
+		FIVE,
+		SIX,
+		SEVEN,
+		EIGHT,
+		NINE,
+		TEN,
+		JACK,
+		QUEEN,
+		KING,
+		ACE
 	};
 
 	class Card
@@ -34,7 +36,7 @@ namespace card
 	public:
 		Card();
 
-		explicit Card(CardSuit suit, CardValue value);
+    	Card(CardSuit suit, CardValue value);
 
 		void SetSuit(CardSuit suit);
 
@@ -42,9 +44,11 @@ namespace card
 
 		void SetPositionCArd(bool pos);
 
-		size_t GetValue() const;
+		CardValue GetValue() const;
 
 		void FlipCard();
+
+		void ShowCard() const;		
 
 	private:
 		CardSuit suit_;
@@ -52,77 +56,64 @@ namespace card
 		bool is_open_card_;
 	};
 
-	class CardsDeck
+	class CardDeck
 	{
 	public:
-		CardsDeck();
-
-		void MixeCardDeck();
-
-		Card GetCard();
+		CardDeck();		
 
 		void ShowCardDeck();
+
+		const std::vector<Card>& GetCardDeck() const
+		{
+			return cards_deck_;
+		}
+
 	private:
-		std::vector<Card> cards_deck_;
+		std::vector<Card> cards_deck_;		
+
+		std::vector<Card> MixDeck(std::vector<Card>&& cards_deck);		
+
+		std::vector<Card> CreateDeck();		
 	};
 }
 
-class Gamer
+namespace hand
 {
-public:
-	Gamer();
+	class Hand
+	{
+	public:
+		Hand();
 
-	void TakeCard(card::Card card);
+		void AddCard(const card::Card& card) noexcept;
 
-	void ShowCards();
+		void ShowCards() const noexcept;		
 
-	size_t GetSumCards();
+		size_t GetSumCards() const noexcept;	
 
-	bool CheckWiner();
+		void Clear() noexcept;		
 
-private:
-	std::vector<card::Card> user_cards_;
-};
+	private:
+		std::vector<std::unique_ptr<card::Card>> user_cards_;
+	};
 
-class GamerUser : public Gamer
-{
-public:
+	class GamerUser : public Hand
+	{
+	public:	
 
-	GamerUser();
+		GamerUser(const std::string& name); 
 
-	explicit GamerUser(const std::string& name);
+	private:
+		std::string name_;
+	};
 
-private:
-	std::string name_;
-};
+	class GamerAI : public Hand
+	{
+	public:
+		GamerAI();
 
-class GamerAI : public Gamer
-{
-public:
-	GamerAI();
+	private:
+		std::string name_ = "AI";
+	};
+}
 
-private:
-	std::string name_ = "AI";
-};
-
-template<class User1, class User2>
-class Game
-{
-public:
-	explicit Game(User1 user1, User2 user2);
-
-	void GameProgress();
-
-	void FirstCardDistribution();
-
-	void CardDistribution();
-
-	void ProgressUser1();
-
-	void ProgressUser2();
-
-private:
-	card::CardsDeck cards_deck_;
-	User1& user1_;
-	User2& user2_;
-};
+void TestBlackJack();

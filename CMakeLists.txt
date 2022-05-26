@@ -7,6 +7,7 @@ set(FILES_PROJECT main.cpp
                   dz1.h 
 				  dz2.h
 				  dz3.h dz3.cpp
+				  dz4.h dz4.cpp
 				  black_jack.h black_jack.cpp)
 				  
 add_executable(main ${FILES_PROJECT})
