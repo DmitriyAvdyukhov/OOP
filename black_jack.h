@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <memory>
-
+#include <iostream>
 
 namespace card
 {
@@ -63,11 +63,8 @@ namespace card
 
 		void ShowCardDeck();
 
-		const std::vector<Card>& GetCardDeck() const
-		{
-			return cards_deck_;
-		}
-
+		const std::vector<Card>& GetCardDeck() const;
+		
 	private:
 		std::vector<Card> cards_deck_;		
 
@@ -96,23 +93,35 @@ namespace hand
 		std::vector<std::unique_ptr<card::Card>> user_cards_;
 	};
 
-	class GamerUser : public Hand
+	class GenericPlayer : public Hand
 	{
-	public:	
+	public:
+		GenericPlayer(const std::string& name);
 
-		GamerUser(const std::string& name); 
+		virtual bool IsHitting() const = 0;
 
+		bool IsBoosted() const;		
+
+		void Bust(std::ostream& out = std::cout) const;
+		
 	private:
 		std::string name_;
 	};
 
-	class GamerAI : public Hand
+	class GamerUser : public GenericPlayer
+	{
+	public:	
+		GamerUser(const std::string& name); 
+
+		bool IsHitting() const  override;		
+	};
+
+	class GamerAI : public GenericPlayer
 	{
 	public:
-		GamerAI();
+		GamerAI();	
 
-	private:
-		std::string name_ = "AI";
+		bool IsHitting() const override;		
 	};
 }
 

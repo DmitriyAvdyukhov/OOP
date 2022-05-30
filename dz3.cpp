@@ -212,6 +212,7 @@ namespace cars
 	{
 		PassengerCar passenger_car("BMW", "X3");
 		Bus bus("Mercedec", "XL300");
+
 		Minivan minivan("WV", "500");		
 	}
 

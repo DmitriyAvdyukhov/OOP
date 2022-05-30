@@ -93,20 +93,6 @@ namespace card
 	{
 		cards_deck_ = MixDeck(CreateDeck());
 	}
-
-	std::vector<Card> CardDeck::CreateDeck()
-	{
-		const size_t count_deck_cards = 52;
-		std::vector<Card> cards_deck;
-		for (size_t i = 0; i < count_deck_cards; ++i)
-		{
-			int num = (i % 13) + 2;
-			CardSuit su = CardSuit(i / 13);
-			cards_deck.push_back(card::Card(su, static_cast<CardValue>(num)));
-		}
-		return cards_deck;
-	}
-
 	
 	void CardDeck::ShowCardDeck()
 	{
@@ -124,6 +110,11 @@ namespace card
 		std::cout << std::endl;
 	}	
 
+	const std::vector<Card>& CardDeck::GetCardDeck() const
+	{
+		return cards_deck_;
+	}
+
 	std::vector<Card> CardDeck::MixDeck(std::vector<Card>&& cards_deck)
 	{
 		srand(time(NULL)); // инициализируем генератор случайных чисел
@@ -137,6 +128,19 @@ namespace card
 		}
 		return cards_deck;
 	}	
+
+	std::vector<Card> CardDeck::CreateDeck()
+	{
+		const size_t count_deck_cards = 52;
+		std::vector<Card> cards_deck;
+		for (size_t i = 0; i < count_deck_cards; ++i)
+		{
+			int num = (i % 13) + 2;
+			CardSuit su = CardSuit(i / 13);
+			cards_deck.push_back(card::Card(su, static_cast<CardValue>(num)));
+		}
+		return cards_deck;
+	}
 }
 
 namespace hand
@@ -232,10 +236,44 @@ namespace hand
 		user_cards_.erase(user_cards_.begin(), user_cards_.end());		
 	}
 
-	GamerUser::GamerUser(const std::string& name) : name_(name)
+	GenericPlayer::GenericPlayer(const std::string& name) : name_(name)
+	{}
+	bool GenericPlayer::IsBoosted() const
+	{
+		if (GetSumCards() > 21)
+		{
+			return true;
+		}
+		return false;
+	}
+	void GenericPlayer::Bust(std::ostream& out) const
+	{
+		out << "Gamer: " << name_ << " bust" << std::endl;
+	}
+
+	GamerUser::GamerUser(const std::string& name) : GenericPlayer(name)
 	{}
 
-	GamerAI::GamerAI() = default;
+	bool GamerUser::IsHitting() const
+	{
+		if (GetSumCards() < 21)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	GamerAI::GamerAI() : GenericPlayer("AI")
+	{}
+
+	bool GamerAI::IsHitting() const
+	{
+		if (GetSumCards() < 21)
+		{
+			return true;
+		}
+		return false;
+	}
 }
 
 void TestBlackJack()

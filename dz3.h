@@ -193,11 +193,8 @@ namespace fraction
 
 	std::istream& operator>>(std::istream& input, Fraction& rational);
 
-
     void TestFraction();   
 
 }//end namespace fraction
-
-
 
 void Dz3();
