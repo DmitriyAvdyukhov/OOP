@@ -287,6 +287,21 @@ namespace hand
 		std::cout << "Player: " << GetName() << " is push" << std::endl;
 	}
 
+	std::ostream& operator<< (std::ostream& out, const GenericPlayer& g)
+	{
+		out << "Player: " << g.GetName() << " his cards: ";
+		for (size_t i = 0; i < g.GetCards().size(); ++i)
+		{
+			if (!g.GetCards()[i]->GetIsOpenCard())
+			{
+				g.GetCards()[i]->FlipCard();
+			}
+			out << *g.GetCards()[i] << " ";
+		}
+		out << "value his cards: " << g.GetSumCards() << std::endl;
+		return out;
+	}
+
 	GamerUser::GamerUser(const std::string& name) : GenericPlayer(name)
 	{}
 
@@ -297,21 +312,6 @@ namespace hand
 			return true;
 		}
 		return false;
-	}
-
-	std::ostream& operator<< (std::ostream& out, const GamerUser& g)
-	{
-		out << "Player: " << g.GetName() << " his cards: ";
-		for (size_t i = 0; i < g.GetCards().size(); ++i)
-		{
-			if (!g.GetCards()[i]->GetIsOpenCard())
-			{
-				g.GetCards()[i]->FlipCard();
-			}
-			out << *g.GetCards()[i] <<" ";
-		}
-		out << "value his cards: " << g.GetSumCards() << std::endl;
-		return out;
 	}
 
 	GamerAI::GamerAI() : GenericPlayer("AI")
@@ -358,4 +358,5 @@ void TestBlackJack()
 	ai.FlipFirstCard();
 	ai.ShowCards();
 	std::cout << "Ai's value: " << ai.GetSumCards() << std::endl;
+	std::cout << ai;
 }

@@ -122,6 +122,7 @@ namespace hand
 		std::string name_;
 	};
 
+	std::ostream& operator<< (std::ostream& out, const GenericPlayer& g);	
 	
 	class GamerUser : public GenericPlayer
 	{
@@ -131,8 +132,6 @@ namespace hand
 		bool IsHitting() const  override;
 		
 	};
-
-	std::ostream& operator<< (std::ostream& out, const GamerUser& g);
 	
 	class GamerAI : public GenericPlayer
 	{
