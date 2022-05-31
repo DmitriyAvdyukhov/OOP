@@ -35,31 +35,24 @@ namespace card
 
 	void Card::FlipCard()
 	{
-		if (is_open_card_)
-		{
-			is_open_card_ = false;
-		}
-		else
-		{
-			is_open_card_ = true;
-		}
+		is_open_card_ = !is_open_card_;
 	}
 
-	void Card::ShowCard() const
+	void Card::ShowCard(std::ostream& out) const
 	{		
 		switch (suit_)
 		{
 		case CardSuit::CLUBS:
-			std::cout << "CLUBS ";
+			out << "CLUBS ";
 			break;
 		case CardSuit::DIAMONDS:
-			std::cout << "DIAMONDS ";
+			out << "DIAMONDS ";
 			break;
 		case CardSuit::WORMS:
-			std::cout << "WORMS ";
+			out << "WORMS ";
 			break;
 		case CardSuit::SPANDES:
-			std::cout << "SPANDES ";
+			out << "SPANDES ";
 			break;
 		}
 		if (value_ == CardValue::ACE 
@@ -70,23 +63,41 @@ namespace card
 			switch (value_)
 			{
 			case CardValue::ACE:
-				std::cout << "A";
+				out << "A";
 				break;
 			case CardValue::JACK:
-				std::cout << "J";
+				out << "J";
 				break;
 			case CardValue::QUEEN:
-				std::cout << "Q";
+				out << "Q";
 				break;
 			case CardValue::KING:
-				std::cout << "K";
+				out << "K";
 				break;
 			}
 		}
 		else
 		{
-			std::cout << static_cast<int>(value_);
+			out << static_cast<int>(value_);
 		}
+	}
+
+	bool Card::GetIsOpenCard() const
+	{
+		return is_open_card_;
+	}
+
+	std::ostream& operator<< (std::ostream& out, const Card& c)
+	{
+		if (c.GetIsOpenCard())
+		{
+			c.ShowCard(out);
+		}
+		else
+		{
+			out << "XX";
+		}
+		return out;
 	}
 
 	CardDeck::CardDeck()
@@ -99,7 +110,7 @@ namespace card
 		int i = 0;
 		for (const auto& card : cards_deck_)
 		{
-			card.ShowCard();
+			std::cout << card;
 			std::cout << " ";
 			if (!((i + 1) % 13))
 			{
@@ -163,13 +174,13 @@ namespace hand
 		{			
 			if (is_first)
 			{
-				card->ShowCard();
+				std::cout << *card;
 				is_first = false;
 			}
 			else
 			{
 				std::cout << ", ";
-				card->ShowCard();
+				std::cout << *card;
 			}			
 		}
 		std::cout << std::endl;
@@ -236,6 +247,11 @@ namespace hand
 		user_cards_.erase(user_cards_.begin(), user_cards_.end());		
 	}
 
+	const std::vector<std::unique_ptr<card::Card>>& Hand::GetCards() const
+	{
+		return user_cards_;
+	}
+
 	GenericPlayer::GenericPlayer(const std::string& name) : name_(name)
 	{}
 	bool GenericPlayer::IsBoosted() const
@@ -251,6 +267,26 @@ namespace hand
 		out << "Gamer: " << name_ << " bust" << std::endl;
 	}
 
+	std::string GenericPlayer::GetName() const
+	{
+		return name_;
+	}
+
+	void GenericPlayer::Win()const
+	{
+		std::cout << "Player: " << GetName() << " is winer" << std::endl;
+	}
+
+	void GenericPlayer::Lose() const
+	{
+		std::cout << "Player: " << GetName() << " is lose" << std::endl;
+	}
+
+	void GenericPlayer::Push() const
+	{
+		std::cout << "Player: " << GetName() << " is push" << std::endl;
+	}
+
 	GamerUser::GamerUser(const std::string& name) : GenericPlayer(name)
 	{}
 
@@ -263,16 +299,36 @@ namespace hand
 		return false;
 	}
 
+	std::ostream& operator<< (std::ostream& out, const GamerUser& g)
+	{
+		out << "Player: " << g.GetName() << " his cards: ";
+		for (size_t i = 0; i < g.GetCards().size(); ++i)
+		{
+			if (!g.GetCards()[i]->GetIsOpenCard())
+			{
+				g.GetCards()[i]->FlipCard();
+			}
+			out << *g.GetCards()[i] <<" ";
+		}
+		out << "value his cards: " << g.GetSumCards() << std::endl;
+		return out;
+	}
+
 	GamerAI::GamerAI() : GenericPlayer("AI")
 	{}
 
 	bool GamerAI::IsHitting() const
 	{
-		if (GetSumCards() < 21)
+		if (GetSumCards() < 16)
 		{
 			return true;
 		}
 		return false;
+	}
+
+	void GamerAI::FlipFirstCard()
+	{
+		GetCards()[0]->FlipCard();
 	}
 }
 
@@ -293,11 +349,13 @@ void TestBlackJack()
 	}
 	std::cout << "User1 shows his cards" << std::endl;
 	user1.ShowCards();
+	std::cout << user1;
 	std::cout << "User1's value: " << user1.GetSumCards() << std::endl;
 	std::cout << "User2 shows his cards" << std::endl;
 	user2.ShowCards();
 	std::cout << "User2's value: " << user2.GetSumCards() << std::endl;
 	std::cout << "AI shows its cards" << std::endl;
+	ai.FlipFirstCard();
 	ai.ShowCards();
 	std::cout << "Ai's value: " << ai.GetSumCards() << std::endl;
 }

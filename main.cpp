@@ -3,6 +3,7 @@
 #include "dz3.h"
 #include "dz4.h"
 #include "dz5.h"
+#include "dz6.h"
 
 #include "black_jack.h"
 
@@ -13,8 +14,9 @@ int main()
 	/*Dz1();
 	Dz2();	
 	Dz3();	
-	Dz4();*/
-	Dz5();
+	Dz4();
+	Dz5();*/
+	Dz6();
 	TestBlackJack();
   return 0;
 }

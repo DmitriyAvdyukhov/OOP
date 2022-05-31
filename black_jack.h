@@ -48,7 +48,9 @@ namespace card
 
 		void FlipCard();
 
-		void ShowCard() const;		
+		void ShowCard(std::ostream& out = std::cout) const;
+
+		bool GetIsOpenCard() const;		
 
 	private:
 		CardSuit suit_;
@@ -56,6 +58,8 @@ namespace card
 		bool is_open_card_;
 	};
 
+	std::ostream& operator<< (std::ostream& out, const Card& c);
+	
 	class CardDeck
 	{
 	public:
@@ -87,10 +91,12 @@ namespace hand
 
 		size_t GetSumCards() const noexcept;	
 
-		void Clear() noexcept;		
+		void Clear() noexcept;	
+
+		const std::vector<std::unique_ptr<card::Card>>& GetCards() const;		
 
 	private:
-		std::vector<std::unique_ptr<card::Card>> user_cards_;
+		 std::vector<std::unique_ptr<card::Card>> user_cards_;
 	};
 
 	class GenericPlayer : public Hand
@@ -103,25 +109,39 @@ namespace hand
 		bool IsBoosted() const;		
 
 		void Bust(std::ostream& out = std::cout) const;
+
+		std::string GetName() const;		
+		
+		void Win()const;
+
+		void Lose() const;
+
+		void Push() const;
 		
 	private:
 		std::string name_;
 	};
 
+	
 	class GamerUser : public GenericPlayer
 	{
 	public:	
 		GamerUser(const std::string& name); 
 
-		bool IsHitting() const  override;		
+		bool IsHitting() const  override;
+		
 	};
 
+	std::ostream& operator<< (std::ostream& out, const GamerUser& g);
+	
 	class GamerAI : public GenericPlayer
 	{
 	public:
 		GamerAI();	
 
-		bool IsHitting() const override;		
+		bool IsHitting() const override;	
+
+		void FlipFirstCard();		
 	};
 }
 
