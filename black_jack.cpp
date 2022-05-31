@@ -290,15 +290,22 @@ namespace hand
 	std::ostream& operator<< (std::ostream& out, const GenericPlayer& g)
 	{
 		out << "Player: " << g.GetName() << " his cards: ";
-		for (size_t i = 0; i < g.GetCards().size(); ++i)
+		if (g.GetCards().size())
 		{
-			if (!g.GetCards()[i]->GetIsOpenCard())
+			for (size_t i = 0; i < g.GetCards().size(); ++i)
 			{
-				g.GetCards()[i]->FlipCard();
+				if (!g.GetCards()[i]->GetIsOpenCard())
+				{
+					g.GetCards()[i]->FlipCard();
+				}
+				out << *g.GetCards()[i] << " ";
 			}
-			out << *g.GetCards()[i] << " ";
+			out << "value his cards: " << g.GetSumCards() << std::endl;
 		}
-		out << "value his cards: " << g.GetSumCards() << std::endl;
+		else
+		{
+			out << " empty" << std::endl;
+		}
 		return out;
 	}
 
