@@ -3,6 +3,13 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <algorithm>
+
+namespace error
+{
+	class StopGame
+	{};
+}
 
 namespace card
 {
@@ -38,19 +45,19 @@ namespace card
 
     	Card(CardSuit suit, CardValue value);
 
-		void SetSuit(CardSuit suit);
+		void SetSuit(CardSuit suit) noexcept;
 
-		void SetValueCard(CardValue value);
+		void SetValueCard(CardValue value) noexcept;
 
-		void SetPositionCArd(bool pos);
+		void SetPositionCArd(bool pos) noexcept;
 
-		CardValue GetValue() const;
+		CardValue GetValue() const noexcept;
 
-		void FlipCard();
+		void FlipCard() noexcept;
 
-		void ShowCard(std::ostream& out = std::cout) const;
+		void ShowCard(std::ostream& out = std::cout) const noexcept;
 
-		bool GetIsOpenCard() const;		
+		bool GetIsOpenCard() const noexcept;
 
 	private:
 		CardSuit suit_;
@@ -63,20 +70,29 @@ namespace card
 	class CardDeck
 	{
 	public:
+		using Iterator = std::vector<Card>::iterator;		
+
 		CardDeck();		
 
-		void ShowCardDeck();
+		void ShowCardDeck(std::vector<Card>& cards_deck) const noexcept;
 
-		const std::vector<Card>& GetCardDeck() const;
+		std::vector<Card>& GetCardDeck() noexcept;
 		
-	private:
-		std::vector<Card> cards_deck_;		
+		Iterator GetIter() noexcept;
 
-		std::vector<Card> MixDeck(std::vector<Card>&& cards_deck);		
+		void ShiftIt();
+
+		void ShuffleDeck() noexcept;
+
+		void operator()() noexcept;		
+
+	private:
+		Iterator it_; 
+		std::vector<Card> cards_deck_;	
 
 		std::vector<Card> CreateDeck();		
 	};
-}
+}// namespace card
 
 namespace hand
 {
@@ -85,7 +101,7 @@ namespace hand
 	public:
 		Hand();
 
-		void AddCard(const card::Card& card) noexcept;
+		void AddCard(card::Card card) noexcept;
 
 		void ShowCards() const noexcept;		
 
@@ -142,6 +158,62 @@ namespace hand
 
 		void FlipFirstCard();		
 	};
-}
 
-void TestBlackJack();
+} //------------namespace hand
+
+namespace game
+{
+	class Game
+	{
+	private:
+		card::CardDeck card_deck_;
+		std::shared_ptr<hand::GamerAI> diller_;
+		std::vector<std::shared_ptr<hand::GamerUser>> players_;
+
+	public:
+		Game(const std::vector<std::string>& players);
+
+		void Play();
+
+	private:
+		template<class Ptr>
+		void Deal(Ptr& user);
+
+		void AddItinationalCards(std::shared_ptr<hand::GamerUser>& player);
+
+		void AddItinationalCards(std::shared_ptr<hand::GamerAI>& player);
+
+		void ProcessGame();
+
+		void GameRaund();
+
+		void PrintPlayrsCards() const;
+
+		void FirstDealCards();
+
+		void ClearPlayers();
+
+		std::vector<std::shared_ptr<hand::GenericPlayer>> CreateVectorWiners() const noexcept;
+
+		void ShowWinersAndLose(std::vector<std::shared_ptr<hand::GenericPlayer>> winers) const noexcept;
+
+		void Winers() const noexcept;
+	};
+
+	template<class Ptr>
+	void Game::Deal(Ptr& user)
+	{
+		if (card_deck_.GetIter() != (card_deck_.GetCardDeck().end()))
+		{
+			user->AddCard(*(card_deck_.GetIter()));
+			card_deck_.ShiftIt();
+		}
+		else
+		{
+			throw error::StopGame();
+		}
+	}
+
+ } // --------------namespace game
+
+void GameBlackJack();
