@@ -228,7 +228,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You want to shift to right. Your shift isn't correct. Your coordinet now is: ", p_);
+					throw OffTheField("You want to shift to right. Your move isn't correct. Your coordinet now is: ", p_);
 				}
 			}
 
@@ -241,7 +241,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You want to shift to left. Your shift isn't correct. Your coordinet now is: ", p_);
+					throw OffTheField("You want to shift to left. Your move isn't correct. Your coordinet now is: ", p_);
 				}
 			}
 
@@ -253,7 +253,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You want to shift to up. Your shift isn't correct. Your coordinet now is: ", p_);
+					throw OffTheField("You want to shift to up. Your move isn't correct. Your coordinet now is: ", p_);
 				}
 			}
 
@@ -265,7 +265,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You want to shift to down. Your shift isn't correct. Your coordinet now is: ", p_);
+					throw OffTheField("You want to shift to down. Your move isn't correct. Your coordinet now is: ", p_);
 				}
 			}
 
