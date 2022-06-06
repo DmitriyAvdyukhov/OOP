@@ -368,7 +368,7 @@ namespace hand
 
 namespace game
 {
-	Game::Game(const std::vector<std::string>& players) : card_deck_()
+	Game::Game(std::vector<std::string>&& players) : card_deck_()
 	{
 		diller_ = std::make_unique< hand::GamerAI>();
 		for (const std::string& name : players)
@@ -533,7 +533,7 @@ namespace game
 		return winers;
 	}
 
-	void Game::ShowWinersAndLose(std::vector<std::shared_ptr<hand::GenericPlayer>> winers) const noexcept
+	void Game::ShowWinersAndLose(std::vector<std::shared_ptr<hand::GenericPlayer>>&& winers) const noexcept
 	{
 		if (winers.size() == 1)
 		{
@@ -581,20 +581,24 @@ namespace game
 
 }// namespace game
 
-void GameBlackJack()
+std::vector<std::string> GreeateePlayers()
 {
-	std::cout << "\n\t Game Black-Jack\n";
 	size_t count = 0;
 	std::cout << "Please enter count players from 1 to 7" << std::endl;
 	std::cin >> count;
-	std::vector<std::string>names;
+	std::vector<std::string> names;
 	for (size_t i = 1; i <= count; ++i)
 	{
 		std::string name;
 		std::cout << "Plase enter nicky " << i << " player" << std::endl;
 		std::cin >> name;
 		names.push_back(std::move(name));
-	}	
-	game::Game g(names);
+	}
+	return names;
+}
+
+void GameBlackJack()
+{
+	game::Game g(GreeateePlayers());
 	g.Play();	
 }

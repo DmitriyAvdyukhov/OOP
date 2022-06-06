@@ -1,97 +1,124 @@
 #pragma once
 #include <iostream>
 
+using namespace std::literals;
+
 namespace dz8
 {
-	class DivisionByZero
-	{};
-
-	int Div()
+	namespace div
 	{
-		int x = 0, y = 0;
-		std::cin >> x >> y;
-		if (y == 0)
+		class DivisionByZero
 		{
-			throw DivisionByZero();
-		}
-		return x / y;
-	}
+		public:
+			DivisionByZero(const std::string& what) : what_(what)
+			{}
 
-	void TestDiv()
-	{
-		try
-		{
-			Div();
-		}
-		catch (DivisionByZero)
-		{
-			std::cout << "Catch exception y = 0" << std::endl;
-		}
-	}
-
-	class Ex
-	{
-	public:
-
-		Ex() = default;
-
-		Ex(double x) : x_(x)
-		{}
-
-		void What()
-		{
-			std::cout << "You enter number: " << x_ << std::endl;
-		}
-
-	private:
-		double x_ = 0.;
-	};
-
-	class Bar
-	{
-	public:
-		Bar() = default;
-
-		void Set(double a)
-		{
-			if (y_ + a > 100)
+			void What() const
 			{
-				throw Ex(y_ * a);
+				std::cerr << what_ << std::endl;
 			}
-			else
+
+		private:
+			std::string what_;
+
+		};
+
+		int Div()
+		{
+			int x = 0, y = 0;
+			std::cout << "Pleas enter dividend and divisor"s << std::endl;
+			std::cin >> x >> y;
+			if (y == 0)
 			{
-				y_ += a;
+				throw DivisionByZero("Divisor equal zero"s);
 			}
+			return x / y;
 		}
 
-	private:
-		double y_ = 0;
-	};
-
-	void TestBarEx()
-	{
-		Bar bar;
-		while (true)
+		void TestDiv()
 		{
-			int x = 0;
-			std::cin >> x;
-			if (x != 0)
+			std::cout << "Start test Div"s << std::endl;
+			try
 			{
-				try
+				Div();
+			}
+			catch (DivisionByZero& e)
+			{
+				e.What();
+			}
+			std::cout << "Test Div is Ok"s << std::endl;
+		}
+
+	} // namespace div
+
+	namespace bar_ex
+	{
+		class Ex
+		{
+		public:
+
+			Ex() = default;
+
+			Ex(double x) : x_(x)
+			{}
+
+			void What()
+			{
+				std::cout << "You enter number: "s << x_ << std::endl;
+			}
+
+		private:
+			double x_ = 0.;
+		};
+
+		class Bar
+		{
+		public:
+			Bar() = default;
+
+			void Set(double a)
+			{
+				if (y_ + a > 100)
 				{
-					bar.Set(x);
+					throw Ex(y_ * a);
 				}
-				catch (Ex& e)
+				else
 				{
-					e.What();
+					y_ += a;
 				}
 			}
-			else
+
+		private:
+			double y_ = 0;
+		};
+
+		void TestBarEx()
+		{
+			std::cout << "Start test BarEx"s << std::endl;
+			Bar bar;
+			while (true)
 			{
-				break;
+				int x = 0;
+				std::cout << "Pleas enter number. If you want to stop enter \"0\""s << std::endl;
+				std::cin >> x;
+				if (x != 0)
+				{
+					try
+					{
+						bar.Set(x);
+					}
+					catch (Ex& e)
+					{
+						e.What();
+					}
+				}
+				else
+				{
+					break;
+				}
 			}
 		}
-	}
+	} // namespace bar_ex
 
 	namespace robot
 	{
@@ -216,7 +243,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You can set not correct coordinat. Your coordinet now is: ", p_);
+					throw OffTheField("You can set not correct coordinat. Your coordinet now is: "s, p_);
 				}
 			}
 
@@ -228,7 +255,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You want to shift to right. Your move isn't correct. Your coordinet now is: ", p_);
+					throw OffTheField("You want to shift to right. Your move isn't correct. Your coordinet now is: "s, p_);
 				}
 			}
 
@@ -241,7 +268,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You want to shift to left. Your move isn't correct. Your coordinet now is: ", p_);
+					throw OffTheField("You want to shift to left. Your move isn't correct. Your coordinet now is: "s, p_);
 				}
 			}
 
@@ -253,7 +280,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You want to shift to up. Your move isn't correct. Your coordinet now is: ", p_);
+					throw OffTheField("You want to shift to up. Your move isn't correct. Your coordinet now is: "s, p_);
 				}
 			}
 
@@ -265,7 +292,7 @@ namespace dz8
 				}
 				else
 				{
-					throw OffTheField("You want to shift to down. Your move isn't correct. Your coordinet now is: ", p_);
+					throw OffTheField("You want to shift to down. Your move isn't correct. Your coordinet now is: "s, p_);
 				}
 			}
 
@@ -293,65 +320,67 @@ namespace dz8
 			Point p_;
 			Space space_[BASE][BASE];
 		};
-	}
 
-	void TestRobot()
-	{
-		robot::Robot r;
-		r.PrintSpace();
-		while (true)
+		void TestRobot()
 		{
-			try
+			robot::Robot r;
+			r.PrintSpace();
+			while (true)
 			{
-				std::string command;
-				std::cout << "Where do you want to shift your robot? Pleas enter command. \"r\" : right,"
-					<< " \"l\" : left, \"u\" : up, \"d\" : down, or \"b\" for stop" << std::endl;
-				std::cin >> command;
-				if (command == "l")
+				try
 				{
-					r.ShiftLeft();
-					r.PrintSpace();
+					char command;
+					std::cout << "Where do you want to shift your robot? Pleas enter command. \"r\" : right,"s
+						<< " \"l\" : left, \"u\" : up, \"d\" : down, or \"b\" for stop"s << std::endl;
+					std::cin >> command;
+					if (command == 'l')
+					{
+						r.ShiftLeft();
+						r.PrintSpace();
+					}
+					else if (command == 'r')
+					{
+						r.ShiftRight();
+						r.PrintSpace();
+					}
+					else if (command == 'u')
+					{
+						r.ShiftUp();
+						r.PrintSpace();
+					}
+					else if (command == 'd')
+					{
+						r.ShiftDown();
+						r.PrintSpace();
+					}
+					else if (command == 'b')
+					{
+						break;
+					}
+					else
+					{
+						throw robot::IlLegalCommand("Your command isn't correct"s);
+					}
 				}
-				else if (command == "r")
+				catch (robot::OffTheField& e)
 				{
-					r.ShiftRight();
-					r.PrintSpace();
+					e.What();
 				}
-				else if (command == "u")
+				catch (robot::IlLegalCommand& e)
 				{
-					r.ShiftUp();
-					r.PrintSpace();
+					e.What();
+					std::cout << "Please try agen"s << std::endl;
 				}
-				else if (command == "d")
-				{
-					r.ShiftDown();
-					r.PrintSpace();
-				}
-				else if (command == "b")
-				{
-					break;
-				}
-				else
-				{
-					throw robot::IlLegalCommand("Your command isn't correct");
-				}				
-			}
-			catch (robot::OffTheField& e)
-			{
-				e.What();
-			}
-			catch (robot::IlLegalCommand& e)
-			{
-				e.What();
-				std::cout << "Please try agen" << std::endl;
 			}
 		}
-	}
+	} // namespace robot
+
+	
 
 	void Dz8()
 	{
-		TestDiv();
-		TestBarEx();
-		TestRobot();
+		div::TestDiv();
+		bar_ex::TestBarEx();
+		robot::TestRobot();
 	}
 }

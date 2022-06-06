@@ -171,7 +171,7 @@ namespace game
 		std::vector<std::shared_ptr<hand::GamerUser>> players_;
 
 	public:
-		Game(const std::vector<std::string>& players);
+		Game(std::vector<std::string>&& players);
 
 		void Play();
 
@@ -195,7 +195,7 @@ namespace game
 
 		std::vector<std::shared_ptr<hand::GenericPlayer>> CreateVectorWiners() const noexcept;
 
-		void ShowWinersAndLose(std::vector<std::shared_ptr<hand::GenericPlayer>> winers) const noexcept;
+		void ShowWinersAndLose(std::vector<std::shared_ptr<hand::GenericPlayer>>&& winers) const noexcept;
 
 		void Winers() const noexcept;
 	};
@@ -215,5 +215,7 @@ namespace game
 	}
 
  } // --------------namespace game
+
+std::vector<std::string> GreeateePlayers();
 
 void GameBlackJack();
