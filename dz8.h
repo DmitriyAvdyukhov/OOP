@@ -210,6 +210,11 @@ namespace dz8
 		public:
 			Robot(): p_()
 			{
+				FillSpace();
+			}
+
+			void FillSpace()
+			{
 				for (size_t i = 0; i < BASE; ++i)
 				{
 					for (size_t j = 0; j < BASE; ++j)
@@ -217,7 +222,7 @@ namespace dz8
 						space_[i][j] = Space::ZIRO;
 					}
 				}
-				space_[0][0]= Space::BUSY;
+				space_[0][0] = Space::BUSY;
 			}
 
 			void PrintSpace() const
@@ -296,23 +301,51 @@ namespace dz8
 				}
 			}
 
-			void ShiftPoint(Direction d)
+			void MoveRobot()
 			{
-				if (d == Direction::RIGHT)
+				bool is_true = true;
+				while (is_true)
 				{
-					ShiftRight();
-				}
-				else if (d == Direction::LEFT)
-				{
-					ShiftLeft();
-				}
-				else if (d == Direction::UP)
-				{
-					ShiftUp();
-				}
-				else if (d == Direction::DOWN)
-				{
-					ShiftDown();
+					std::cout << "Where do you want to shift your robot? Pleas enter command. \"r\" : right,"s
+						<< " \"l\" : left, \"u\" : up, \"d\" : down, or \"b\" for stop"s << std::endl;
+					try
+					{
+						switch (char command(std::getchar()); command)
+
+						{
+						case 'l':
+							ShiftLeft();
+							PrintSpace();
+							command = std::getchar();
+							break;
+						case 'r':
+							ShiftRight();
+							PrintSpace();
+							command = std::getchar();
+							break;
+						case 'u':
+							ShiftUp();
+							PrintSpace();
+							command = std::getchar();
+							break;
+						case 'd':
+							ShiftDown();
+							PrintSpace();
+							command = std::getchar();
+							break;
+						case 'b':
+							is_true = false;
+							break;
+						default:
+							throw robot::IlLegalCommand("Your command isn't correct"s);
+							break;
+						}
+					}
+					catch (robot::IlLegalCommand& e)
+					{
+						e.What();
+						std::cout << "Please try agen"s << std::endl;
+					}							
 				}
 			}
 
@@ -325,53 +358,16 @@ namespace dz8
 		{
 			robot::Robot r;
 			r.PrintSpace();
-			while (true)
+			try
 			{
-				try
-				{
-					char command;
-					std::cout << "Where do you want to shift your robot? Pleas enter command. \"r\" : right,"s
-						<< " \"l\" : left, \"u\" : up, \"d\" : down, or \"b\" for stop"s << std::endl;
-					std::cin >> command;
-					if (command == 'l')
-					{
-						r.ShiftLeft();
-						r.PrintSpace();
-					}
-					else if (command == 'r')
-					{
-						r.ShiftRight();
-						r.PrintSpace();
-					}
-					else if (command == 'u')
-					{
-						r.ShiftUp();
-						r.PrintSpace();
-					}
-					else if (command == 'd')
-					{
-						r.ShiftDown();
-						r.PrintSpace();
-					}
-					else if (command == 'b')
-					{
-						break;
-					}
-					else
-					{
-						throw robot::IlLegalCommand("Your command isn't correct"s);
-					}
-				}
-				catch (robot::OffTheField& e)
-				{
-					e.What();
-				}
-				catch (robot::IlLegalCommand& e)
-				{
-					e.What();
-					std::cout << "Please try agen"s << std::endl;
-				}
+				r.MoveRobot();
+					
 			}
+			catch (robot::OffTheField& e)
+			{
+
+				e.What();
+			}			
 		}
 	} // namespace robot
 
