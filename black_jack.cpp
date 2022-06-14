@@ -255,7 +255,7 @@ namespace hand
 
 			for (size_t i = 0; i < count_ace; ++i)
 			{
-				if (result + ace < max_iner)
+				if (result + ace <= max_iner)
 				{
 					result += ace;
 				}
