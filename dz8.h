@@ -35,6 +35,7 @@ namespace dz8
 			return x / y;
 		}
 
+
 		void TestDiv()
 		{
 			std::cout << "Start test Div"s << std::endl;

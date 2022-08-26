@@ -1,0 +1,9 @@
+# ninja log v5
+14	1818	6769383288176184	CMakeFiles/main.dir/dz5.cpp.obj	1910c49be40cd24d
+7	1843	6769383288863011	CMakeFiles/main.dir/dz3.cpp.obj	eb08f30126221813
+1	1844	6769383288782802	CMakeFiles/main.dir/main.cpp.obj	b176f6aa835216b2
+19	1845	6769383288627382	CMakeFiles/main.dir/dz4.cpp.obj	5dba62952494b317
+25	1849	6769383289083598	CMakeFiles/main.dir/black_jack.cpp.obj	95c6cb0b6f4cb69b
+1850	3364	6769383303933092	main.exe	b73ed6575f3d21b7
+1	889	6769387784637047	CMakeFiles/main.dir/black_jack.cpp.obj	95c6cb0b6f4cb69b
+890	1903	6769387792426094	main.exe	b73ed6575f3d21b7
